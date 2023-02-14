@@ -1,0 +1,23 @@
+.employees {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.employee {
+    background-color: rgba(127, 255, 212, 0.565);
+    border: 1px solid aqua;
+    color: black;
+    padding: 0.5rem;
+    margin: 0.5rem;
+}
+
+.employee__header {
+    font-weight: bolder;
+    font-size: larger;
+}
+
+.employee__footer {
+    font-style: italic;
+}
