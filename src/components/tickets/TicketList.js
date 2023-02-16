@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
+import { Ticket } from "./Ticket"
 import "./Tickets.css"
 
 export const TicketList = ({ searchTermState }) => {
     const [tickets, setTickets] = useState([])
+    const [employees, setEmployeeArr] = useState([])
     const [filteredTickets, setFiltered] = useState([])
     const [emergency, setEmergency] = useState(false)
     const [openOnly, updateOpenOnly] = useState(false)
@@ -34,12 +36,22 @@ export const TicketList = ({ searchTermState }) => {
         [emergency]
     )
 
+    const getAllTickets = () => {
+        fetch(`http://localhost:8088/serviceTickets?_embed=employeeTickets`)
+        .then(res => res.json())
+        .then((ticketArray) => {
+            setTickets(ticketArray)
+        })
+    }
+
     useEffect(
         () => {
-            fetch(`http://localhost:8088/serviceTickets`)
+            getAllTickets()
+
+            fetch(`http://localhost:8088/employees?_expand=user`)
             .then(res => res.json())
-            .then((ticketArray) => {
-                setTickets(ticketArray)
+            .then((employeeArr) => {
+                setEmployeeArr(employeeArr)
             })
         },
         [] // When this array is empty, you are observing initial component state
@@ -91,15 +103,11 @@ export const TicketList = ({ searchTermState }) => {
         <article className="tickets">
         {
             filteredTickets.map(
-                (ticket) => {
-                    return <div className="ticket" key={ticket.id}> 
-                    <header>
-                        <Link to={`/tickets/${ticket.id}/edit`}>Ticket {ticket.id}</Link>
-                    </header>
-                    <section>{ticket.description}</section>
-                        <footer>Emergency: {ticket.emergency ? " 🧨" : "No"}</footer>
-                        </div>
-                }
+                (ticket) => <Ticket key={ticket.id} 
+                employees={employees} 
+                currentUser={honeyUserObject} 
+                ticketObject={ticket}
+                getAllTickets={getAllTickets}  />
             )
         }
 

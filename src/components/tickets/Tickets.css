@@ -9,3 +9,11 @@
     padding: 0.7rem;
     margin: 0.5rem 0;
 }
+
+hr {
+    border: 1px dashed purple;
+}
+
+.ticket_header {
+    font-weight: bolder;
+}
