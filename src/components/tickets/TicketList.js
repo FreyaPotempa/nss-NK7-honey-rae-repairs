@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { Ticket } from "./Ticket"
 import "./Tickets.css"
+import { getAllTickets, getEmployeeUsers } from "../ApiManager"
 
 export const TicketList = ({ searchTermState }) => {
     const [tickets, setTickets] = useState([])
@@ -36,20 +37,23 @@ export const TicketList = ({ searchTermState }) => {
         [emergency]
     )
 
-    const getAllTickets = () => {
-        fetch(`http://localhost:8088/serviceTickets?_embed=employeeTickets`)
-        .then(res => res.json())
-        .then((ticketArray) => {
-            setTickets(ticketArray)
-        })
-    }
+    useEffect(
+        () => {
+            getAllTickets()
+                .then(
+                    (ticketArray) => {
+                    setTickets(ticketArray)
+                    }
+                    )
+        }, []
+    )
 
     useEffect(
         () => {
             getAllTickets()
-
-            fetch(`http://localhost:8088/employees?_expand=user`)
-            .then(res => res.json())
+            .then(
+                getEmployeeUsers()
+            )
             .then((employeeArr) => {
                 setEmployeeArr(employeeArr)
             })

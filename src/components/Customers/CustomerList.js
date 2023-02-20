@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react"
 import { Customer } from "./Customer"
 import "./Customers.css"
-
+import { getAllCustomers } from "../ApiManager"
 
 export const CustomerList = () => {
     const [customers, setCustomers] = useState([])
 
     useEffect(
         () => {
-            fetch(`http://localhost:8088/users?isStaff=false`)
-            .then(res => res.json())
-            .then((custies) => {
+           getAllCustomers()
+           .then(
+            (custies) => {
                 setCustomers(custies)
-            })
+            }
+           )
         },
         []
     )
